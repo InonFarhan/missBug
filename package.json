@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "My first Node server",
   "scripts": {
-    "start": "nodemon --ignore \"./data\" server.js"
+    "start": "node server.js"
+   
   },
   "author": "Me",
   "dependencies": {
