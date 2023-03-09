@@ -189,4 +189,4 @@ app.post('/api/auth/signup', (req, res) => {
         })
 })
 
-app.listen(port, () => console.log(`Server ready at port http://localhost:${port}!`))
+app.listen(port, () => console.log(`Server ready at port http://localhost:${port}`))
