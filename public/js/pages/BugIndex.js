@@ -1,4 +1,3 @@
-'use strict'
 import { bugService } from '../services/bug.service.js'
 import bugList from '../cmps/BugList.js'
 import bugFilter from '../cmps/BugFilter.js'
@@ -27,8 +26,10 @@ export default {
 				label: '',
 				sortType: 'createdAt',
 				sortDesc: 1,
-				page: 0
-			}
+				page: 0,
+				isUserPage: false,
+			},
+			totalPages: 0
 		}
 	},
 	created() {
@@ -36,7 +37,10 @@ export default {
 	},
 	methods: {
 		loadBugs() {
-			bugService.query(this.filterBy).then((bugs) => this.bugs = bugs)
+			bugService.query(this.filterBy).then(({ currBugs, totalPages }) => {
+				this.bugs = currBugs
+				this.totalPages = totalPages
+			})
 		},
 		setFilterBy(filterBy) {
 			this.filterBy = filterBy
@@ -47,7 +51,8 @@ export default {
 		},
 		getPage(dir) {
 			this.filterBy.page += dir
-			if (this.filterBy.page < 0) this.filterBy.page = 0
+			if (this.filterBy.page >= this.totalPages) this.filterBy.page = 0;
+			if (this.filterBy.page < 0) this.filterBy.page = this.totalPages - 1
 			this.loadBugs()
 		},
 	},

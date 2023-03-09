@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "description": "My first Node server",
   "scripts": {
-    "start": "node server.js"
-   
+    "start": "node server.js",
+    "build": "",
+    "dev": "set PORT=3030 & nodemon --ignore \"./data\" server.js"
   },
   "author": "Me",
   "dependencies": {
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
+    "cryptr": "^6.2.0",
     "download-pdf": "^0.1.6",
     "express": "^4.18.2",
     "pdfkit": "^0.13.0"

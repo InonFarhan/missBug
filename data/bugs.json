@@ -1,45 +1,50 @@
 [
   {
-    "_id": "a7vrw",
-    "title": "test title",
+    "_id": "7sd6o",
+    "title": "puki bug",
     "severity": 2,
-    "description": "testb  discription",
-    "labels": [
-      "critical",
-      "need-CR"
-    ],
-    "createdAt": 1678205642857
-  },
-  {
-    "_id": "6lQl6",
-    "title": "dsfsdf",
-    "severity": 1,
-    "description": "sdfsdf",
+    "description": "sdfdsf",
     "labels": [
       "critical"
     ],
-    "createdAt": 1678208202125
+    "createdAt": 1678305662256,
+    "creator": {
+      "_id": "dfg88",
+      "fullname": "Puki Ba",
+      "isAdmin": "false"
+    }
   },
   {
-    "_id": "viAEO",
-    "title": "now",
-    "description": "test description",
+    "_id": "NbybG",
+    "title": "moshe bug",
+    "severity": 2,
+    "description": "sdfsdff",
+    "labels": [
+      "need-CR",
+      "dev-branch"
+    ],
+    "createdAt": 1678305693177,
+    "creator": {
+      "_id": "8vq0J",
+      "fullname": "Moshe",
+      "isAdmin": "false"
+    }
+  },
+  {
+    "_id": "Cdqcj",
+    "title": "Yaron bug",
     "severity": 3,
-    "createdAt": 1678220462925,
+    "description": "ahla sel bug ze",
     "labels": [
       "critical",
       "need-CR",
       "dev-branch"
-    ]
-  },
-  {
-    "_id": "Ys9oN",
-    "title": "blabla",
-    "severity": 1,
-    "description": "bobobo",
-    "labels": [
-      "critical"
     ],
-    "createdAt": 1678221192706
+    "createdAt": 1678305815930,
+    "creator": {
+      "_id": "8vq0J",
+      "fullname": "Yaron ha carish",
+      "isAdmin": "true"
+    }
   }
 ]

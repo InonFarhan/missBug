@@ -1,6 +1,5 @@
-
 const fs = require('fs')
-const bugs = require('../data/bugs.json')
+const gBugs = require('../data/bugs.json')
 const download = require('download-pdf')
 const PdfService = require('./pdfService.js')
 const PAGE_SIZE = 3
@@ -12,44 +11,46 @@ module.exports = {
     save
 }
 
-function query(filterBy) {
-    let currBugs = bugs.filter((bug) => {
+function query(filterBy, loggedinUser) {
+    let bugs = gBugs.filter((bug) => {
         if (!(bug.title.includes(filterBy.txt))) return false
         if ((bug.severity < filterBy.severity)) return false
         if (filterBy.label && bug.labels.length) return bug.labels.some(label => (label.includes(filterBy.label)))
         return true
     })
-    currBugs = currBugs.sort((a, b) => {
-        if (a[filterBy.sortType] > b[filterBy.sortType]) return (-1 * filterBy.sortDesc)
-        if (a[filterBy.sortType] < b[filterBy.sortType]) return (1 * filterBy.sortDesc)
-        return 0
-    })
+
+    bugs.sort((bug1, bug2) => (bug1[filterBy.sortType] - bug2[filterBy.sortType]) * filterBy.sortDesc)
+
     if (filterBy.page) {
         const startIdx = filterBy.page * PAGE_SIZE
-        currBugs = currBugs.slice(startIdx, startIdx + PAGE_SIZE)
+        bugs = bugs.slice(startIdx, startIdx + PAGE_SIZE)
     }
-    return Promise.resolve(currBugs)
+
+    if (filterBy.isUserPage === 'true') bugs = bugs.filter((bug) => bug.creator._id === loggedinUser._id)
+
+    const totalPages = Math.ceil(gBugs.length / PAGE_SIZE)
+    return Promise.resolve({ totalPages, currBugs: bugs })
 }
 
 function getById(bugId) {
-    const bug = bugs.find(bug => bug._id === bugId)
+    const bug = gBugs.find(bug => bug._id === bugId)
     if (!bug) return Promise.reject('Unknown bug')
     return Promise.resolve(bug)
 }
 
-function remove(bugId) {
-    const idx = bugs.findIndex(bug => bug._id === bugId)
+function remove(bugId, loggedinUser) {
+    const idx = gBugs.findIndex(bug => bug._id === bugId)
     if (idx === -1) return Promise.reject('Unknonwn bug')
-
-    bugs.splice(idx, 1)
+    if (loggedinUser.isAdmin === "false" && gBugs[idx].creator._id !== loggedinUser._id) return Promise.reject('Not your bug')
+    gBugs.splice(idx, 1)
     return _saveBugsToFile()
 }
 
 function save(bug) {
     var savedBug
     if (bug._id) {
-        const idx = bugs.findIndex(currBug => currBug._id === bug._id)
-        bugs[idx] = bug
+        const idx = gBugs.findIndex(currBug => currBug._id === bug._id)
+        gBugs[idx] = bug
     } else {
         savedBug = {
             _id: _makeId(),
@@ -57,9 +58,10 @@ function save(bug) {
             severity: bug.severity,
             description: bug.description,
             labels: bug.labels,
-            createdAt: bug.createdAt
+            createdAt: bug.createdAt,
+            creator: bug.creator
         }
-        bugs.push(savedBug)
+        gBugs.push(savedBug)
     }
     return _saveBugsToFile().then(() => {
         return savedBug
@@ -77,7 +79,7 @@ function _makeId(length = 5) {
 
 function _saveBugsToFile() {
     return new Promise((resolve, reject) => {
-        const data = JSON.stringify(bugs, null, 2)
+        const data = JSON.stringify(gBugs, null, 2)
 
         fs.writeFile('data/bugs.json', data, (err) => {
             if (err) return reject(err)

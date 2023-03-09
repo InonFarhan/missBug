@@ -24,6 +24,7 @@ function getEmptyBug() {
     description: '',
     createdAt: Date.now(),
     labels: [],
+    creator: null
   }
 }
 

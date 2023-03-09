@@ -1,5 +1,3 @@
-'use strict'
-
 import bugPreview from './BugPreview.js'
 
 export default {
@@ -10,7 +8,6 @@ export default {
     </section>
     <section v-else class="bug-list">Yay! No Bugs!</section>
     `,
-	methods: {},
 	components: {
 		bugPreview,
 	},

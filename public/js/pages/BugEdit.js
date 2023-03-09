@@ -1,7 +1,6 @@
-'use strict'
-
 import { bugService } from '../services/bug.service.js'
 import { eventBus } from '../services/event-bus.service.js'
+import { userService } from "../services/user.service.js"
 
 export default {
   template: `
@@ -40,6 +39,7 @@ export default {
   data() {
     return {
       bug: null,
+      loggedinUser: userService.getLoggedInUser()
     }
   },
   created() {
@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     saveBug() {
+      this.bug.creator = this.loggedinUser
       if (!this.bug.title || !this.bug.severity || !this.bug.description || !this.bug.labels) eventBus.emit('show-msg', { txt: 'All fields must be filled out.', type: 'error' })
       else
         bugService.save(this.bug).then(() => {

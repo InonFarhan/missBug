@@ -1,5 +1,3 @@
-'use strict'
-
 export default {
   props: ['bug'],
   template: `<article className="bug-preview">
